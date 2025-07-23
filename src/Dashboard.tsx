@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import SimulateRealTimeData from "./SimulateRealTimeData";
 
+// Create an interface of the object's data type for the sensor's data.
 interface MyDataType {
     sensorId: string;
     timestamp: string;
@@ -10,6 +11,9 @@ interface MyDataType {
 }
 
 const Dashboard = () => {
+    // Create a few state variables.
+    // data is used to hold the full list of sensor data that is accumulated over time while
+    // dataToDisplay is used to hold the currently filtered, sorted, and/or paginated data for display.
     const [data, setData] = useState<MyDataType[]>([]);
     const [dataToDisplay, setDataToDisplay] = useState<MyDataType[]>([]);
     const [sortOrder, setSortOrder] = useState("Timestamp");
@@ -20,20 +24,27 @@ const Dashboard = () => {
     const [airQualityLowerBound, setAirQualityLowerBound] = useState("");
     const [airQualityUpperBound, setAirQualityUpperBound] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
 
+    // Simulate incoming sensor data every second and append it to the current data.
     useEffect(() => {
         const stopSimulation = SimulateRealTimeData(
             100,
             1000,
             (updates: MyDataType[]) => {
                 setData((data) => [...updates, ...data]);
+                setTotalPages(totalPages + 10);
             }
         );
         return () => stopSimulation();
-    }, []);
+    }, [totalPages]);
 
     useEffect(() => {
+        // Create a filter function for humidity
         function filterByHumidity(obj: MyDataType) {
+            // We first check to make sure that the user inputs a valid input (a number)
+            // so that it does not mess up the data that is shown. We then return whether
+            // or not <obj>.humidity is within the upper and lower bounds of the humidity.
             if (!humidityLowerBound) {
                 if (Number.isNaN(Number(humidityUpperBound))) {
                     setHumidityUpperBound("");
@@ -66,9 +77,12 @@ const Dashboard = () => {
             }
         }
 
+        // Create a filter function for temperature
         function filterByTemperature(obj: MyDataType) {
+            // We first check to make sure that the user inputs a valid input (a number)
+            // so that it does not mess up the data that is shown. We then return whether
+            // or not <obj>.temperature is within the upper and lower bounds of the temperature.
             if (!temperatureLowerBound) {
-                // if empty string
                 if (Number.isNaN(Number(temperatureUpperBound))) {
                     setTemperatureUpperBound("");
                 } else {
@@ -100,7 +114,11 @@ const Dashboard = () => {
             }
         }
 
+        // Create a filter function for air quality
         function filterByAirQuality(obj: MyDataType) {
+            // We first check to make sure that the user inputs a valid input (a number)
+            // so that it does not mess up the data that is shown. We then return whether
+            // or not <obj>.temperature is within the upper and lower bounds of the temperature.
             if (!airQualityLowerBound) {
                 if (Number.isNaN(Number(airQualityUpperBound))) {
                     setAirQualityUpperBound("");
@@ -133,8 +151,8 @@ const Dashboard = () => {
             }
         }
 
+        // We sort the data based on the selected sort order from the user.
         let newData = [...data];
-        console.log(newData);
         if (sortOrder === "Humidity: Ascending") {
             newData.sort((a, b) => a.humidity - b.humidity);
         } else if (sortOrder === "Humidity: Descending") {
@@ -149,6 +167,7 @@ const Dashboard = () => {
             newData.sort((a, b) => b.airQuality - a.airQuality);
         }
 
+        // We filter the data based on the applied filters by the user.
         const humidityFilterNotActive =
             !humidityLowerBound && !humidityUpperBound;
         const temperatureFilterNotActive =
@@ -338,12 +357,21 @@ const Dashboard = () => {
                         className="page-display"
                         value={currentPage}
                         onChange={(e) => {
-                            setCurrentPage(Number(e.target.value));
+                            if (e.target.value === "") {
+                                setCurrentPage(0);
+                            } else {
+                                const num = Number(e.target.value);
+                                if (!Number.isNaN(num) && num > 0) {
+                                    setCurrentPage(num);
+                                }
+                            }
                         }}
                     />
+
                     <button onClick={() => setCurrentPage(currentPage + 1)}>
                         &gt;
                     </button>
+                    <p>Total Pages: {totalPages}</p>
                 </nav>
             </div>
         </div>

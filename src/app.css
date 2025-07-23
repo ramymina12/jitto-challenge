@@ -1,7 +1,3 @@
-body {
-    overflow: hidden;
-}
-
 .container {
     display: flex;
     align-items: center;
@@ -37,5 +33,5 @@ td {
 }
 
 .page-display {
-    width: 15px;
+    width: 40px;
 }
