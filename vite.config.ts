@@ -8,4 +8,5 @@ export default defineConfig({
             usePolling: true,
         },
     },
+    base: "https://ramymina12.github.io/jitto-challenge/",
 });
