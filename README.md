@@ -13,13 +13,10 @@ A React + TypeScript application that visualizes live data from greenhouse senso
 
 ## Project Structure
 
-.
-├── Dashboard.tsx **_Main Dashboard Component_**
-├── SimulateRealTimeData.tsx **_Simulates live sensor data feed_**
-├── app.css
-├── fse_challenge_j250.pdf
-├── main.tsx
-└── vite-env.d.ts
+ - Dashboard.tsx **_(Main Dashboard Component)_**
+ - SimulateRealTimeData.tsx **_(Simulates live sensor data feed)_**
+ - app.css
+ - main.tsx
 
 ## Performance Analysis
 
