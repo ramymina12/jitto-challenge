@@ -35,3 +35,13 @@ td {
 .page-display {
     width: 40px;
 }
+
+@media screen and (max-width: 600px) {
+    table {
+        font-size: 0.8rem;
+    }
+    table th,
+    table td {
+        padding: 0.5px;
+    }
+}
