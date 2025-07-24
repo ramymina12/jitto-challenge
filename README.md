@@ -33,7 +33,9 @@ A React + TypeScript application that visualizes live data from greenhouse senso
 
 **Memory Usage**
 
--   Memory usage with an average of 45.95mb.
+-   Memory grows over time as sensor data accumulates.
+-   Memory growth is expected for real-time data storage.
+-   UI remains responsive due to efficient pagination and rendering.
 
 **Update Speed**
 
